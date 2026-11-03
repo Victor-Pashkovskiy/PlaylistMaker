@@ -1,43 +1,50 @@
 package com.example.lab2
-import androidx.navigation.NavHostController
+
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-
-
-enum class Screen(val route: String) {
-    MAIN("main"),
-    SEARCH("search"),
-    SETTINGS("settings")
-}
-
+import com.example.lab2.domain.model.Track
+import com.example.lab2.view_model.SearchViewModel
+import com.google.gson.Gson
 
 @Composable
-fun PlaylistHost(navController: NavHostController = rememberNavController()) {
-
-
-    val navigateToSearch = { navController.navigate(Screen.SEARCH.route) }
-    val navigateToSettings = { navController.navigate(Screen.SETTINGS.route) }
-    val navigateBack = { navController.popBackStack() }
-
+fun PlaylistHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    gson: Gson,
+    searchViewModel: SearchViewModel
+) {
     NavHost(
         navController = navController,
-        startDestination = Screen.MAIN.route
+        startDestination = "main"
     ) {
-        composable(Screen.MAIN.route) {
+        composable("main") {
             MainScreen(
-                onSearchClick = navigateToSearch,
-                onSettingsClick = navigateToSettings
+                onSearchClick = { navController.navigate("search") },
+                onSettingsClick = { navController.navigate("settings") }
             )
         }
-        composable(Screen.SEARCH.route) {
-            SearchScreen()
-
+        composable("search") {
+            SearchScreen(
+                searchViewModel = searchViewModel,
+                navigateToDetailScreen = { track ->
+                    val trackJson = gson.toJson(track)
+                    navController.navigate("details/$trackJson")
+                }
+            )
         }
-        composable(Screen.SETTINGS.route) {
+        composable("details/{trackJson}") { backStackEntry ->
+            val trackJson = backStackEntry.arguments?.getString("trackJson")
+            if (trackJson != null) {
+                val track = gson.fromJson(trackJson, Track::class.java)
+                DetailsScreen(track = track)
+            }
+        }
+        composable("settings") {
             SettingsScreen(
-                onBackClick = navigateBack
+                onBackClick = { navController.popBackStack() }
             )
         }
     }
