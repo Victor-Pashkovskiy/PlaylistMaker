@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
-    <string name="search">Поиск</string>
-    <string name="playlists">Плейлисты</string>
-    <string name="favorites">Избранное</string>
-    <string name="settings">Настройки</string>
+    <string name="settings_title">Настройки</string>
+    <string name="share_app">Поделиться приложением</string>
+    <string name="write_to_support">Написать разработчикам</string>
+    <string name="user_agreement">Пользовательское соглашение</string>
+    <string name="share_text">Посмотри, какое крутое приложение!</string>
+    <string name="support_email">banankalash@gmail.com</string>
+    <string name="email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="email_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="offer_url">https://yandex.ru/legal/practicum_offer/</string>
 </resources>
