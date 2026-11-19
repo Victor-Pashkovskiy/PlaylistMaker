@@ -19,11 +19,7 @@ class SearchViewModel(
             _searchScreenState.value = SearchState.Searching
             try {
                 val result = trackRepository.searchTracksContains(query)
-                if (result.isNotEmpty()) {
-                    _searchScreenState.value = SearchState.Success(result)
-                } else {
-                    _searchScreenState.value = SearchState.Fail("Ничего не найдено")
-                }
+                _searchScreenState.value = SearchState.Success(result)
             } catch (e: Exception) {
                 _searchScreenState.value = SearchState.Fail("Ошибка: ${e.message}")
             }
