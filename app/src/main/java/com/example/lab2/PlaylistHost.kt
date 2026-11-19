@@ -18,7 +18,8 @@ fun PlaylistHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "main",
+        modifier = modifier
     ) {
         composable("main") {
             MainScreen(

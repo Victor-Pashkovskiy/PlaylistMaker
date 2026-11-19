@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.example.lab2.domain.model.Track
 import com.example.lab2.view_model.SearchState
 import com.example.lab2.view_model.SearchViewModel
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun SearchScreen(
@@ -47,7 +48,7 @@ fun SearchScreen(
     navigateToDetailScreen: (Track) -> Unit
 ) {
     val screenState by searchViewModel.searchScreenState.collectAsState()
-    var text by remember { mutableStateOf("") }
+    var text by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -118,9 +119,16 @@ private fun SearchResults(
             }
         }
         is SearchState.Success -> {
-            LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(screenState.foundList) { track ->
-                    TrackListItem(track = track, onClick = { onTrackClick(track) })
+            val tracks = screenState.foundList
+            if (tracks.isEmpty()) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Ничего не найдено", fontSize = 18.sp, color = Color.Black)
+                }
+            } else {
+                LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    items(tracks) { track ->
+                        TrackListItem(track = track, onClick = { onTrackClick(track) })
+                    }
                 }
             }
         }
